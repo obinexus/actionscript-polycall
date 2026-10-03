@@ -1,0 +1,45 @@
+{
+  "name": "actionscript-polycall",
+  "version": "2.0.0",
+  "private": true,
+  "description": "ActionScript 3 binding for Polycall (binding ABI v1): AS3 classes compiled to JavaScript for Node.js by Apache Royale, calling the real native Polycall core through koffi.",
+  "license": "MIT",
+  "author": "Nnamdi Michael Okpala <okpalan@protonmail.com>",
+  "homepage": "https://github.com/obinexus/actionscript-polycall#readme",
+  "bugs": {
+    "url": "https://github.com/obinexus/actionscript-polycall/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/obinexus/actionscript-polycall.git"
+  },
+  "files": [
+    "src/",
+    "examples/",
+    "tests/",
+    "actionscript-polycallrc",
+    "polycall-binding.json",
+    "README.md",
+    "TODO.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "asnodec -js-dynamic-access-unknown-members=true -source-path+=src -js-output=build/example examples/Hello.as && asnodec -js-dynamic-access-unknown-members=true -source-path+=src -js-output=build/test tests/TestMain.as",
+    "test": "node tests/run-tests.js"
+  },
+  "dependencies": {
+    "koffi": "^3.3.2"
+  },
+  "devDependencies": {
+    "@apache-royale/royale-js": "0.9.12"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "polycall": {
+    "core": "polycall >= 1.1.0 (binding ABI 1)",
+    "coreRepository": "https://github.com/obinexus/polycall",
+    "abi": 1,
+    "registry": "none (private build manifest; not an npm package)"
+  }
+}

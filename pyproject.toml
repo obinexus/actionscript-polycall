@@ -1,0 +1,16 @@
+# QA descriptor for the Polycall binding matrix (read by polycall/qa/run_qa.py).
+# This repository is NOT a Python package and is not pip-installable;
+# its native manifest is package.json (a private npm build manifest for
+# Apache Royale + koffi; not published to any registry).
+[tool.polycall.binding]
+name = "actionscript-polycall"
+language = "ActionScript 3"
+native_manifest = "package.json"
+registry = "none"
+package = ""
+abi = 1
+support = "partial"
+linux_image = "node:22 + apt openjdk-17-jre-headless + polycall core (build-linux-core.sh)"
+build = "npm ci && npm run build"
+test = "npm test"
+windows_test = "npm ci --omit=dev && npm test with AS3_POLYCALL_BUILD_DIR=<asnodec output>, POLYCALL_LIBRARY=<polycall.dll or libpolycall.dll>, POLYCALL_CLI=<polycall.exe>"

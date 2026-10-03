@@ -1,14 +1,11 @@
-# TODO — actionscript-polycall (ActionScript)
+# TODO — actionscript-polycall (ActionScript 3)
 
-Status: 🧩 scaffolded adapter for libpolycall 1.5.0. Honestly not yet wired to
-the core — this file tracks the remaining work. Rolled up in
-[../../docs/release/TODO-1.5.md](../../docs/release/TODO-1.5.md).
+Status: AS3 binding on Apache Royale -> Node.js, calling the real core via
+koffi; tested on Linux and Windows.
 
-- [x] Folder structure, manifest, and `actionscript-polycallrc` (shared schema)
-- [ ] Locate/generate ActionScript FFI bindings for `polycall_ffi.h`
-- [ ] Implement the thin adapter in `src/` (idioms -> `polycall_ffi_run_config`)
-- [ ] Add a runnable example under `examples/`
-- [ ] Add a smoke test under `tests/`
-- [ ] Confirm `scripts/verify-dry.sh` passes (no core duplication)
+- [ ] AIR: an AIR Native Extension (ANE) that exposes polycall.h to AS3 on
+      Adobe/HARMAN AIR. Needs the proprietary AIR SDK (licence acceptance);
+      the Peer/Polycall API would stay the same over a second backend.
+- [ ] macOS: untested (no macOS host; the core has no verified macOS build).
 
 Do not add config parsing or runtime logic here — adapt the core only.

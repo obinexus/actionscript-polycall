@@ -1,8 +1,10 @@
-# actionscript-polycallrc - read-only ActionScript runtime overrides for libpolycall
+# actionscript-polycallrc - ActionScript runtime overrides for Polycall
 #
-# This file uses the SHARED polycall schema (src/config/polycall_config_schema.c).
-# It introduces no new keys or parser: the ActionScript adapter passes this path to
-# the core via the FFI boundary. Values here override polycallrc for ActionScript.
+# Grammar: the core's own configuration loader -- exactly what
+# `polycall config validate actionscript-polycallrc` and
+# polycall_ffi_run_config accept (core docs/BINDING_ABI.md). The binding
+# adds no parser and no keys: Polycall.runConfig(path) hands this path to
+# polycall_ffi_run_config(path, 1).
 
 log_level=info
 max_connections=1000

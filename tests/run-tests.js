@@ -77,25 +77,18 @@ function build() {
     }
     return { main, example, how: `prebuilt in ${dir}` };
   }
-  const exe = process.env.ROYALE_ASNODEC ||
-    path.join(root, "node_modules", ".bin", process.platform === "win32" ? "asnodec.cmd" : "asnodec");
-  if (!process.env.ROYALE_ASNODEC && !fs.existsSync(exe)) {
-    return { skip: "Apache Royale is not installed (npm ci installs @apache-royale/royale-js; it needs Java 8+)" };
-  }
+  const { compile } = require("../scripts/build");
   const result = { how: [] };
   for (const [what, source] of [["test", "tests/TestMain.as"], ["example", "examples/Hello.as"]]) {
     const out = path.join(root, "build", what);
-    const args = ["-js-dynamic-access-unknown-members=true", "-source-path+=src", `-js-output=${out}`, source];
-    const r = spawnSync(exe, args, { cwd: root, encoding: "utf8", windowsHide: true, shell: process.platform === "win32" });
-    const text = `${r.stdout || ""}${r.stderr || ""}`;
-    const summary = (text.match(/\d+ error\(s\), \d+ warning\(s\)[^\n]*/) || [""])[0];
-    if (r.error || r.status !== 0 || / [1-9]\d* error\(s\)/.test(text) || !summary) {
-      if (/java|JAVA_HOME/i.test(text) && !/Error:/.test(text)) return { skip: `asnodec could not run (Java?): ${text.slice(-400)}` };
-      return { error: `asnodec ${source} failed (exit ${r.status}): ` +
-        text.split("\n").filter((l) => /error/i.test(l)).slice(0, 20).join("\n") };
+    const r = compile(path.join(root, source), out);
+    if (r.missing) return { skip: r.missing };
+    if (!r.ok) {
+      return { error: `Royale (${r.javaVersion}) failed on ${source} (exit ${r.status}, ${r.summary}): ` +
+        r.text.split("\n").filter((l) => /error/i.test(l) && !/LoggerErrorManager/.test(l)).slice(0, 20).join("\n") };
     }
     result[what === "test" ? "main" : "example"] = path.join(out, "bin", "js-release", "index.js");
-    result.how.push(`asnodec ${args.join(" ")} (${summary})`);
+    result.how.push(`${r.command} (${r.summary}; ${r.javaVersion})`);
   }
   result.how = result.how.join("; ");
   return result;
@@ -247,7 +240,7 @@ async function main() {
       encoding: "utf8", windowsHide: true, timeout: 60000 });
     check(ex.status === 0 && /valid for running/.test(ex.stdout) &&
       /as3-outbox sent 'hello from ActionScript' as m-1/.test(ex.stdout),
-    "examples/Hello.as (compiled by asnodec) validates actionscript-polycallrc and exchanges a message", ex.stdout + ex.stderr);
+    "examples/Hello.as (compiled by Royale for Node.js) validates actionscript-polycallrc and exchanges a message", ex.stdout + ex.stderr);
   } finally {
     if (daemonStop) {
       const r = daemonStop();

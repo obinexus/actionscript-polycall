@@ -15,6 +15,7 @@
   },
   "files": [
     "src/",
+    "scripts/",
     "examples/",
     "tests/",
     "actionscript-polycallrc",
@@ -24,7 +25,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "asnodec -js-dynamic-access-unknown-members=true -source-path+=src -js-output=build/example examples/Hello.as && asnodec -js-dynamic-access-unknown-members=true -source-path+=src -js-output=build/test tests/TestMain.as",
+    "build": "node scripts/build.js",
     "test": "node tests/run-tests.js"
   },
   "dependencies": {

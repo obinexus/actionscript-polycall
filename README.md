@@ -65,13 +65,15 @@ Requires Node.js >= 22, Java 8+ (for the Royale compiler) and the core.
 
 ```sh
 npm ci                      # koffi + @apache-royale/royale-js (dev)
-npm run build               # asnodec -> build/example, build/test
+npm run build               # scripts/build.js (Royale, node target) -> build/example, build/test
 node build/example/bin/js-release/index.js
 npm test                    # tests/run-tests.js
 ```
 
-`npm test` compiles `tests/TestMain.as` and `examples/Hello.as` with
-`asnodec`, starts a `polycall start` runtime, a `polycall daemon start`
+`npm test` compiles `tests/TestMain.as` and `examples/Hello.as` with Royale
+(`scripts/build.js` runs the compiler jar exactly as the `asnodec` launcher
+does, but without that launcher's `asnodec.bat` step, which current Node.js
+refuses to spawn on Windows), starts a `polycall start` runtime, a `polycall daemon start`
 daemon and a `polycall peer serve` C node, and runs the AS3 test against the
 real library (`POLYCALL_LIBRARY`, `POLYCALL_CLI`): the binding-ABI checklist
 (configuration incl. strict/TLS/non-ASCII path, `invoke` against the runtime
